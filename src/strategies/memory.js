@@ -9,7 +9,7 @@ let cache = {
  * Gelert.
  * Permissions done simply.
  *
- * @author Kieron Wiltshire <kieron@concept-gaming.com>
+ * @author Kieron Wiltshire <kieron.wiltshire@outlook.com>
  */
 export default class MemoryStorageStrategy {
 
