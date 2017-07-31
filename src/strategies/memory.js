@@ -90,7 +90,7 @@ export default class MemoryStorageStrategy {
   /**
    * Retrieve all of the permissions.
    *
-   * @returns {object}
+   * @returns {Array}
    */
   async getPermissions() {
     return Promise.resolve(cache.permissions);
