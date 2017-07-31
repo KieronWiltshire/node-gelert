@@ -18,9 +18,11 @@ the default parameters are used.
 ```JavaScript
 const Gelert = require('gelert');
 const GelertSQLStrategy = require('gelert-sql-strategy');
+const knexFile = require('./knexfile.js');
+const knex = require('knex')(knexFile);
 
 const gelert = new Gelert({
-  storage: new GelertSQLStrategy()
+  storage: new GelertSQLStrategy(knex)
 });
 ```
 
