@@ -1,6 +1,6 @@
 {
   "name": "gelert",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simplistic permission system",
   "main": "./build/gelert.js",
   "scripts": {
