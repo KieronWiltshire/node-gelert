@@ -23,7 +23,7 @@ export const operationNotAllowed = new ErrorCode('operation_not_allowed', { mess
  * Gelert.
  * Permissions done simply.
  *
- * @author Kieron Wiltshire <kieron@concept-gaming.com>
+ * @author Kieron Wiltshire <kieron.wiltshire@outlook.com>
  */
 export default class Gelert {
 
