@@ -15,8 +15,10 @@ export default class MemoryStorageStrategy {
    * Create a new {MemoryStorageStrategy} instance.
    */
   constructor() {
-    this._roles = [];
-    this._permissions = [];
+    this._cache = {
+      roles: [],
+      permissions: []
+    };
   }
 
   /**
@@ -37,7 +39,7 @@ export default class MemoryStorageStrategy {
    * @returns {Array}
    */
   async getRoles() {
-    return Promise.resolve(cache.roles);
+    return Promise.resolve(this._cache.roles);
   }
 
   /**
@@ -48,9 +50,9 @@ export default class MemoryStorageStrategy {
    */
   async getRoleById(id) {
     let role = null;
-    for (let i = 0; i < cache.roles.length; i++) {
-      if (cache.roles[i].id === id) {
-        role = cache.roles[i];
+    for (let i = 0; i < this._cache.roles.length; i++) {
+      if (this._cache.roles[i].id === id) {
+        role = this._cache.roles[i];
         break;
       }
     }
@@ -65,9 +67,9 @@ export default class MemoryStorageStrategy {
    */
   async getRoleByName(name) {
     let role = null;
-    for (let i = 0; i < cache.roles.length; i++) {
-      if (cache.roles[i].name === name) {
-        role = cache.roles[i];
+    for (let i = 0; i < this._cache.roles.length; i++) {
+      if (this._cache.roles[i].name === name) {
+        role = this._cache.roles[i];
         break;
       }
     }
@@ -80,13 +82,13 @@ export default class MemoryStorageStrategy {
    * @returns {boolean} true if the role was saved successfully
    */
   async saveRole(role) {
-    for (let i = 0; i < cache.roles.length; i++) {
-      if (cache.roles[i].equals(role)) {
-        cache.roles.splice(i, 1);
+    for (let i = 0; i < this._cache.roles.length; i++) {
+      if (this._cache.roles[i].equals(role)) {
+        this._cache.roles.splice(i, 1);
         break;
       }
     }
-    cache.roles.push(role);
+    this._cache.roles.push(role);
     return Promise.resolve();
   }
 
@@ -96,9 +98,9 @@ export default class MemoryStorageStrategy {
    * @returns {boolean} true if the permission was saved successfully
    */
   async deleteRole(role) {
-    for (let i = 0; i < cache.roles.length; i++) {
-      if (cache.roles[i] === role) {
-        cache.roles.splice(i, 1);
+    for (let i = 0; i < this._cache.roles.length; i++) {
+      if (this._cache.roles[i] === role) {
+        this._cache.roles.splice(i, 1);
         break;
       }
     }
@@ -123,7 +125,7 @@ export default class MemoryStorageStrategy {
    * @returns {Array}
    */
   async getPermissions() {
-    return Promise.resolve(cache.permissions);
+    return Promise.resolve(this._cache.permissions);
   }
 
   /**
@@ -134,9 +136,9 @@ export default class MemoryStorageStrategy {
    */
   async getPermissionById(id) {
     let permission = null;
-    for (let i = 0; i < cache.permissions.length; i++) {
-      if (cache.permissions[i].id === id) {
-        permission = cache.permissions[i];
+    for (let i = 0; i < this._cache.permissions.length; i++) {
+      if (this._cache.permissions[i].id === id) {
+        permission = this._cache.permissions[i];
         break;
       }
     }
@@ -151,9 +153,9 @@ export default class MemoryStorageStrategy {
    */
   async getPermissionByName(name) {
     let permission = null;
-    for (let i = 0; i < cache.permissions.length; i++) {
-      if (cache.permissions[i].name == name) {
-        permission = cache.permissions[i];
+    for (let i = 0; i < this._cache.permissions.length; i++) {
+      if (this._cache.permissions[i].name == name) {
+        permission = this._cache.permissions[i];
         break;
       }
     }
@@ -166,13 +168,13 @@ export default class MemoryStorageStrategy {
    * @returns {boolean} true if the permission was saved successfully
    */
   async savePermission(permission) {
-    for (let i = 0; i < cache.permissions.length; i++) {
-      if (cache.permissions[i].equals(permission)) {
-        cache.permissions.splice(i, 1);
+    for (let i = 0; i < this._cache.permissions.length; i++) {
+      if (this._cache.permissions[i].equals(permission)) {
+        this._cache.permissions.splice(i, 1);
         break;
       }
     }
-    cache.permissions.push(permission);
+    this._cache.permissions.push(permission);
     return Promise.resolve();
   }
 
@@ -182,9 +184,9 @@ export default class MemoryStorageStrategy {
    * @returns {boolean} true if the permission was saved successfully
    */
   async deletePermission(permission) {
-    for (let i = 0; i < cache.permissions.length; i++) {
-      if (cache.permissions[i].equals(permission)) {
-        cache.permissions.splice(i, 1);
+    for (let i = 0; i < this._cache.permissions.length; i++) {
+      if (this._cache.permissions[i].equals(permission)) {
+        this._cache.permissions.splice(i, 1);
         break;
       }
     }

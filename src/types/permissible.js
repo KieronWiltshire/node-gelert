@@ -28,6 +28,7 @@ export default class Permissible extends EventEmitter {
    * @param {object} params
    */
   constructor(params) {
+    super();
     const self = this;
     const valid = Permissible.permissible_ValidateParameters(params);
 

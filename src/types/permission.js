@@ -22,6 +22,7 @@ export default class Permission extends EventEmitter {
    * @param {object} params
    */
   constructor(params, storage) {
+    super();
     const self = this;
     const valid = Permission.permission_ValidateParameters(params);
 
