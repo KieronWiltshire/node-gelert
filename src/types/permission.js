@@ -79,7 +79,7 @@ export default class Permission {
    * @returns {boolean} true if the permission was saved successfully
    */
   async delete() {
-    try {
+    try {          
       let result = await this._storageStrategy.deletePermission(this);
 
       return Promise.resolve(result);
@@ -101,4 +101,5 @@ export default class Permission {
       return ((typeof value === 'string' || typeof value === 'number') && (this.id === value || this.name === value))
     }
   }
+ 
 }
