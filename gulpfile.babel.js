@@ -6,11 +6,18 @@ import Gulp from 'gulp';
 import Babel from 'gulp-babel';
 
 let distDir = Path.join(__dirname, 'build');
+let testDistDir = Path.join(__dirname, 'build-test');
 
 /**
  * Build the application
  */
-Gulp.task('build', ['transpile']);
+Gulp.task('build', ['transpile'], function() {
+  return Gulp.src([
+    'test/**/*'
+  ])
+  .pipe(Babel())
+  .pipe(Gulp.dest(testDistDir));
+});
 
 /**
  * Transpile the application
