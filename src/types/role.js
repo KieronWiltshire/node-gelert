@@ -55,6 +55,8 @@ export default class Role extends Permissible {
     valid.inheritance.forEach(function(r) {
       self.addInheritance(r);
     });
+
+    this.emit('create', this);
   }
 
   /**
@@ -88,6 +90,7 @@ export default class Role extends Permissible {
   async save() {
     try {
       let result = await this._storageStrategy.saveRole(this);
+      this.emit('save', this);
 
       return Promise.resolve(result);
     } catch (error) {
@@ -103,6 +106,7 @@ export default class Role extends Permissible {
   async delete() {
     try {
       let result = await this._storageStrategy.deleteRole(this);
+      this.emit('delete', this);
 
       return Promise.resolve(result);
     } catch (error) {
@@ -149,6 +153,11 @@ export default class Role extends Permissible {
       if (!(value instanceof Role)) {
         throw new GelertError().push(unsupportedInstance);
       }
+
+      let self = this;
+      value.on('delete', function() {
+        self.removeInheritance(value);
+      });
 
       this._inheritance.push(value);
       return true;

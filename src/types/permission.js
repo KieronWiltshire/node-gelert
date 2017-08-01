@@ -1,6 +1,7 @@
 'use strict';
 
 import uuidv4 from 'uuid/v4';
+import EventEmitter from 'events';
 import {
   GelertError,
   ErrorCode
@@ -13,7 +14,7 @@ export const nameMustExist = new ErrorCode('name_must_exist', { message: 'A perm
 export const nameMustBeString = new ErrorCode('name_must_be_string', { message: 'The specified name is not of type string' });
 export const parametersMustBeObject = new ErrorCode('parameters_must_be_object', { message: 'Parameters must be specified and wrapped in an object' });
 
-export default class Permission {
+export default class Permission extends EventEmitter {
 
   /**
    * Create a new permission instance.
@@ -33,6 +34,9 @@ export default class Permission {
     if (!this.id) {
       this.id = uuidv4();
     }
+
+    EventEmitter.call(this);
+    this.emit('create', this);
   }
 
   /**
@@ -66,6 +70,7 @@ export default class Permission {
   async save() {
     try {
       let result = await this._storageStrategy.savePermission(this);
+      this.emit('save', this);
 
       return Promise.resolve(result);
     } catch (error) {
@@ -79,8 +84,9 @@ export default class Permission {
    * @returns {boolean} true if the permission was saved successfully
    */
   async delete() {
-    try {          
+    try {
       let result = await this._storageStrategy.deletePermission(this);
+      this.emit('delete', this);
 
       return Promise.resolve(result);
     } catch (error) {
@@ -101,5 +107,5 @@ export default class Permission {
       return ((typeof value === 'string' || typeof value === 'number') && (this.id === value || this.name === value))
     }
   }
- 
+
 }

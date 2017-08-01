@@ -2,6 +2,7 @@
 
 import _ from 'lodash';
 import Permission from './permission';
+import EventEmitter from 'events';
 import {
   unsupportedInstance,
   operationNotAllowed
@@ -19,7 +20,7 @@ export const arrayContainsNonPermissions = new ErrorCode('contains_non_permissio
 export const nameMustExist = new ErrorCode('name_must_exist', { message: 'A permissible must have a name' });
 export const nameMustBeString = new ErrorCode('name_must_be_string', { message: 'The specified name is not of type string' });
 
-export default class Permissible {
+export default class Permissible extends EventEmitter {
 
   /**
    * Create a new permissible instance.
@@ -35,6 +36,8 @@ export default class Permissible {
     valid.permissions.forEach(function(p) {
       self.addPermission(p);
     });
+
+    EventEmitter.call(this);
   }
 
   /**
@@ -102,6 +105,13 @@ export default class Permissible {
    * @returns {boolean} true if the permission was added successfully
    */
   addPermission(value) {
+    if (value instanceof Permission) {
+      let self = this;
+      value.on('delete', function() {
+        self.removePermission(value);
+      });
+    }
+
     if (!this.containsPermission(value)) {
       if (!(value instanceof Permission)) {
         throw new InvalidArgumentException().push(unsupportedInstance);

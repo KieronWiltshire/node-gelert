@@ -3,11 +3,6 @@
 import Permission from '../types/permission';
 import Role from '../types/role';
 
-let cache = {
-  roles: [],
-  permissions: []
-};
-
 /**
  * Gelert.
  * Permissions done simply.
@@ -15,6 +10,14 @@ let cache = {
  * @author Kieron Wiltshire <kieron.wiltshire@outlook.com>
  */
 export default class MemoryStorageStrategy {
+
+  /**
+   * Create a new {MemoryStorageStrategy} instance.
+   */
+  constructor() {
+    this._roles = [];
+    this._permissions = [];
+  }
 
   /**
    * Create and persist a new role.
