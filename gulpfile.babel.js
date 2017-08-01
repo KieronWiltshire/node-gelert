@@ -11,13 +11,7 @@ let testDistDir = Path.join(__dirname, 'build-test');
 /**
  * Build the application
  */
-Gulp.task('build', ['transpile'], function() {
-  return Gulp.src([
-    'test/**/*'
-  ])
-  .pipe(Babel())
-  .pipe(Gulp.dest(testDistDir));
-});
+Gulp.task('build', ['transpile']);
 
 /**
  * Transpile the application
