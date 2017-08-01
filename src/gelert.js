@@ -66,7 +66,11 @@ export default class Gelert {
    */
   async createRole(params) {
     let r = await this.options.storage.createRole(params);
-    return r;
+    if (r instanceof Role) {
+      return r;
+    } else {
+      throw new GelertError().push(invalidDataStructure);
+    }
   }
 
   /**
@@ -77,7 +81,11 @@ export default class Gelert {
    */
   async createPermission(params) {
     let p = await this.options.storage.createPermission(params);
-    return p;
+    if (p instanceof Permission) {
+      return p;
+    } else {
+      throw new GelertError().push(invalidDataStructure);
+    }
   }
 
   /**
