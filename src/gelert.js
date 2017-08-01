@@ -46,9 +46,11 @@ export default class Gelert {
    * @throws {GelertError} if options are invalid
    */
   static gelert_ValidateOptions(options) {
-    options = (typeof options === 'object') ? options : {
-      storage: new MemoryStorageStrategy()
-    };
+    options = (typeof options === 'object') ? options : {};
+
+    if (!options.storage) {
+      options.storage = new MemoryStorageStrategy();
+    }
 
     // Storage strategy validation
     if (typeof options.storage !== 'object') {

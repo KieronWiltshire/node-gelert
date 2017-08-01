@@ -9,136 +9,158 @@ chai.should();
  * Gelert.
  * Permissions done simply.
  *
- * @author Kieron Wiltshire <kieron@concept-gaming.com>
+ * @author Kieron Wiltshire <kieron.wiltshire@outlook.com>
  */
-describe('gelert', function() {
-  it('should create a new gelert instance', async function() {
-    let instance = new Gelert();
-    if (instance) {
-      return Promise.resolve();
-    } else {
-      return Promise.reject('Gelert is null');
-    }
-  });
+ function executeUnitTests(storageStrategy) {
+   describe('gelert', function() {
+     it('should create a new gelert instance', async function() {
+       let instance = new Gelert({
+         storage: storageStrategy
+       });
+       if (instance) {
+         return Promise.resolve();
+       } else {
+         return Promise.reject('Gelert is null');
+       }
+     });
 
-  it('should create a new permission instance', async function() {
-    let instance = new Gelert();
-    let permission = instance.createPermission({ name: 'test-permission' });
-    let exists = await instance.getPermissionByName('test-permission');
+     it('should create a new permission instance', async function() {
+       let instance = new Gelert({
+         storage: storageStrategy
+       });
+       let permission = await instance.createPermission({ name: 'test-permission' });
+       let exists = await instance.getPermissionByName('test-permission');
 
-    if (exists) {
-      return Promise.resolve();
-    } else {
-      return Promise.reject('Permission doesn\'t exist');
-    }
-  });
+       if (exists) {
+         return Promise.resolve();
+       } else {
+         return Promise.reject('Permission doesn\'t exist');
+       }
+     });
 
-  it('should create a new role instance', async function() {
-    let instance = new Gelert();
-    let role = instance.createRole({ name: 'test-role' });
-    let exists = await instance.getRoleByName('test-role');
+     it('should create a new role instance', async function() {
+       let instance = new Gelert({
+         storage: storageStrategy
+       });
+       let role = await instance.createRole({ name: 'test-role' });
+       let exists = await instance.getRoleByName('test-role');
 
-    if (exists) {
-      return Promise.resolve();
-    } else {
-      return Promise.reject('Role doesn\'t exist');
-    }
-  });
+       if (exists) {
+         return Promise.resolve();
+       } else {
+         return Promise.reject('Role doesn\'t exist');
+       }
+     });
 
-  it('should give permission to a role', async function() {
-    let instance = new Gelert();
-    let permission = await instance.createPermission({ name: 'test-permission' });
-    let role = await instance.createRole({ name: 'test-role' });
+     it('should give permission to a role', async function() {
+       let instance = new Gelert({
+         storage: storageStrategy
+       });
+       let permission = await instance.createPermission({ name: 'test-permission' });
+       let role = await instance.createRole({ name: 'test-role' });
 
-    role.addPermission(permission);
+       role.addPermission(permission);
 
-    if (role.hasPermission('test-permission')) {
-      return Promise.resolve();
-    } else {
-      return Promise.reject('Role doesn\'t have permission');
-    }
-  });
+       if (role.hasPermission('test-permission')) {
+         return Promise.resolve();
+       } else {
+         return Promise.reject('Role doesn\'t have permission');
+       }
+     });
 
-  it('should revoke permission from a role', async function() {
-    let instance = new Gelert();
-    let permission = await instance.createPermission({ name: 'test-permission' });
-    let role = await instance.createRole({ name: 'test-role' });
+     it('should revoke permission from a role', async function() {
+       let instance = new Gelert({
+         storage: storageStrategy
+       });
+       let permission = await instance.createPermission({ name: 'test-permission' });
+       let role = await instance.createRole({ name: 'test-role' });
 
-    role.addPermission(permission);
+       role.addPermission(permission);
 
-    if (role.hasPermission('test-permission')) {
-      role.removePermission(permission);
+       if (role.hasPermission('test-permission')) {
+         role.removePermission(permission);
 
-      if (role.hasPermission('test-permission')) {
-        return Promise.reject('Role still has permission');
-      } else {
-        return Promise.resolve();
-      }
-    } else {
-      return Promise.reject('Role doesn\'t have permission to begin with');
-    }
-  });
+         if (role.hasPermission('test-permission')) {
+           return Promise.reject('Role still has permission');
+         } else {
+           return Promise.resolve();
+         }
+       } else {
+         return Promise.reject('Role doesn\'t have permission to begin with');
+       }
+     });
 
-  it('role should not be able to inherit itself', async function() {
-    let instance = new Gelert();
-    let roleA = await instance.createRole({ name: 'test-role-a' });
+     it('role should not be able to inherit itself', async function() {
+       let instance = new Gelert({
+         storage: storageStrategy
+       });
+       let roleA = await instance.createRole({ name: 'test-role-a' });
 
-    try {
-      roleA.addInheritance(roleA);
-      return Promise.reject('Role should not be able to inherit itself');
-    } catch (error) {
-      return Promise.resolve();
-    }
-  });
+       try {
+         roleA.addInheritance(roleA);
+         return Promise.reject('Role should not be able to inherit itself');
+       } catch (error) {
+         return Promise.resolve();
+       }
+     });
 
-  it('should have permission from an inherited role', async function() {
-    let instance = new Gelert();
-    let permission = await instance.createPermission({ name: 'test-permission' });
-    let roleA = await instance.createRole({ name: 'test-role-a' });
-    let roleB = await instance.createRole({ name: 'test-role-b' });
+     it('should have permission from an inherited role', async function() {
+       let instance = new Gelert({
+         storage: storageStrategy
+       });
+       let permission = await instance.createPermission({ name: 'test-permission' });
+       let roleA = await instance.createRole({ name: 'test-role-a' });
+       let roleB = await instance.createRole({ name: 'test-role-b' });
 
-    roleA.addPermission(permission);
-    roleB.addInheritance(roleA);
+       roleA.addPermission(permission);
+       roleB.addInheritance(roleA);
 
-    if (roleB.hasPermission('test-permission')) {
-      return Promise.resolve();
-    } else {
-      return Promise.reject('Role doesn\'t have permission');
-    }
-  });
+       if (roleB.hasPermission('test-permission')) {
+         return Promise.resolve();
+       } else {
+         return Promise.reject('Role doesn\'t have permission');
+       }
+     });
 
-  it('should have permission from a second role in the inheritance tree', async function() {
-    let instance = new Gelert();
-    let permission = await instance.createPermission({ name: 'test-permission' });
-    let roleA = await instance.createRole({ name: 'test-role-a' });
-    let roleB = await instance.createRole({ name: 'test-role-b' });
-    let roleC = await instance.createRole({ name: 'test-role-b' });
+     it('should have permission from a second role in the inheritance tree', async function() {
+       let instance = new Gelert({
+         storage: storageStrategy
+       });
+       let permission = await instance.createPermission({ name: 'test-permission' });
+       let roleA = await instance.createRole({ name: 'test-role-a' });
+       let roleB = await instance.createRole({ name: 'test-role-b' });
+       let roleC = await instance.createRole({ name: 'test-role-b' });
 
-    roleA.addPermission(permission);
-    roleB.addInheritance(roleA);
-    roleC.addInheritance(roleB);
+       roleA.addPermission(permission);
+       roleB.addInheritance(roleA);
+       roleC.addInheritance(roleB);
 
-    if (roleC.hasPermission('test-permission')) {
-      return Promise.resolve();
-    } else {
-      return Promise.reject('Role doesn\'t have permission');
-    }
-  });
+       if (roleC.hasPermission('test-permission')) {
+         return Promise.resolve();
+       } else {
+         return Promise.reject('Role doesn\'t have permission');
+       }
+     });
 
-  it('should not grant given permission to a role that is inherited', async function() {
-    let instance = new Gelert();
-    let permission = await instance.createPermission({ name: 'test-permission' });
-    let roleA = await instance.createRole({ name: 'test-role-a' });
-    let roleB = await instance.createRole({ name: 'test-role-b' });
+     it('should not grant given permission to a role that is inherited', async function() {
+       let instance = new Gelert({
+         storage: storageStrategy
+       });
+       let permission = await instance.createPermission({ name: 'test-permission' });
+       let roleA = await instance.createRole({ name: 'test-role-a' });
+       let roleB = await instance.createRole({ name: 'test-role-b' });
 
-    roleB.addPermission(permission);
-    roleB.addInheritance(roleA);
+       roleB.addPermission(permission);
+       roleB.addInheritance(roleA);
 
-    if (roleA.hasPermission('test-permission')) {
-      return Promise.reject('Role has permission');
-    } else {
-      return Promise.resolve();
-    }
-  });
+       if (roleA.hasPermission('test-permission')) {
+         return Promise.reject('Role has permission');
+       } else {
+         return Promise.resolve();
+       }
+     });
 
-});
+   });
+ }
+
+export default executeUnitTests
