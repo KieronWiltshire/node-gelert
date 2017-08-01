@@ -115,7 +115,7 @@ export default class Permissible extends EventEmitter {
 
     if (!this.containsPermission(value)) {
       if (!(value instanceof Permission)) {
-        throw new InvalidArgumentException().push(unsupportedInstance);
+        throw new GelertError().push(unsupportedInstance);
       }
       this._permissions.push(value);
       return true;
