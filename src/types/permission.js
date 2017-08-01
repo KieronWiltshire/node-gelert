@@ -20,12 +20,11 @@ export default class Permission {
    *
    * @param {object} params
    */
-  constructor(params, storage, gelert) {
+  constructor(params, storage) {
     const self = this;
     const valid = Permission.permission_ValidateParameters(params);
 
     this._storageStrategy = storage;
-    this._gelert = gelert;
 
     Object.keys(valid).forEach(function(p) {
       self[p] = valid[p];
@@ -80,9 +79,8 @@ export default class Permission {
    * @returns {boolean} true if the permission was saved successfully
    */
   async delete() {
-    try {
+    try {          
       let result = await this._storageStrategy.deletePermission(this);
-      await this._gelert._onPermissionDeleteHandler(this);
 
       return Promise.resolve(result);
     } catch (error) {
@@ -103,4 +101,5 @@ export default class Permission {
       return ((typeof value === 'string' || typeof value === 'number') && (this.id === value || this.name === value))
     }
   }
+ 
 }

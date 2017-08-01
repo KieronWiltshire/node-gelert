@@ -65,7 +65,7 @@ export default class Gelert {
    * @return {Role}
    */
   async createRole(params) {
-    let r = new Role(params, this.options.storage, this);
+    let r = new Role(params, this.options.storage);
     await r.save();
     return r;
   }
@@ -77,7 +77,7 @@ export default class Gelert {
    * @return {Role}
    */
   async createPermission(params) {
-    let p = new Permission(params, this.options.storage, this);
+    let p = new Permission(params, this.options.storage);
     await p.save();
     return p;
   }
@@ -224,34 +224,6 @@ export default class Gelert {
     } catch (error) {
       return Promise.reject(error);
     }
-  }
-
-  /**
-   * This method is called by the Permission object when a
-   * permission has been deleted.
-   *
-   * @param {Permission} permission
-   */
-  async _onPermissionDeleteHandler(permission) {
-    let roles = await this.getRoles();
-    for (let i = 0; i < roles.length; i++) {
-      roles[i].removePermission(permission);
-    }
-    return Promise.resolve();
-  }
-
-  /**
-   * This method is called by the Role object when a role
-   * has been deleted.
-   *
-   * @param {Role} role
-   */
-  async _onRoleDeleteHandler(role) {
-    let roles = await this.getRoles();
-    for (let i = 0; i < roles.length; i++) {
-      roles[i].removeInheritance(role);
-    }
-    return Promise.resolve();
   }
 
 }

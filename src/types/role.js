@@ -28,13 +28,12 @@ export default class Role extends Permissible {
    * @param {object} storage
    * @param {Gelert} gelert
    */
-  constructor(params, storage, gelert) {
+  constructor(params, storage) {
     super(params, gelert);
     const self = this;
     const valid = Role.role_ValidateParameters(params);
 
     this._storageStrategy = storage;
-    this._gelert = gelert;
 
     Object.keys(valid).forEach(function(p) {
       // Disallow overwritting reserved parameters
@@ -104,7 +103,6 @@ export default class Role extends Permissible {
   async delete() {
     try {
       let result = await this._storageStrategy.deleteRole(this);
-      await this._gelert._onRoleDeleteHandler(this);
 
       return Promise.resolve(result);
     } catch (error) {
