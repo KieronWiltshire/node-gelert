@@ -29,7 +29,7 @@ export default class Role extends Permissible {
    * @param {Gelert} gelert
    */
   constructor(params, storage) {
-    super(params, gelert);
+    super(params);
     const self = this;
     const valid = Role.role_ValidateParameters(params);
 
@@ -64,7 +64,7 @@ export default class Role extends Permissible {
    * @returns {object} params if valid
    * @throws {GelertError} if params are invalid
    */
-  static role_ValidateParameters(params) {  
+  static role_ValidateParameters(params) {
     if (typeof params === 'object') {
       if (params.inheritance) {
         if (params.inheritance instanceof Array) {

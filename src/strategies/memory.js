@@ -1,5 +1,8 @@
 'use strict';
 
+import Permission from '../types/permission';
+import Role from '../types/role';
+
 let cache = {
   roles: [],
   permissions: []
@@ -12,6 +15,18 @@ let cache = {
  * @author Kieron Wiltshire <kieron.wiltshire@outlook.com>
  */
 export default class MemoryStorageStrategy {
+
+  /**
+   * Create and persist a new role.
+   *
+   * @param {object} params
+   * @returns {Role}
+   */
+  async createRole(params) {
+    let r = new Role(params, this);
+    r.save();
+    return Promise.resolve(r);
+  }
 
   /**
    * Retrieve all of the permission roles.
@@ -85,6 +100,18 @@ export default class MemoryStorageStrategy {
       }
     }
     return Promise.resolve();
+  }
+
+  /**
+   * Create and persist a new permission.
+   *
+   * @param {object} params
+   * @returns {Permission}
+   */
+  async createPermission(params) {
+    let p = new Permission(params, this);
+    p.save();
+    return Promise.resolve(p);
   }
 
   /**

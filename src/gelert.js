@@ -65,8 +65,7 @@ export default class Gelert {
    * @return {Role}
    */
   async createRole(params) {
-    let r = new Role(params, this.options.storage);
-    await r.save();
+    let r = await this.options.storage.createRole(params);
     return r;
   }
 
@@ -77,8 +76,7 @@ export default class Gelert {
    * @return {Role}
    */
   async createPermission(params) {
-    let p = new Permission(params, this.options.storage);
-    await p.save();
+    let p = await this.options.storage.createPermission(params);
     return p;
   }
 

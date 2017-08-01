@@ -79,21 +79,6 @@ describe('gelert', function() {
     }
   });
 
-  it('should revoke permission from a role when a permission is deleted', async function() {
-    let instance = new Gelert();
-    let permission = await instance.createPermission({ name: 'test-permission' });
-    let role = await instance.createRole({ name: 'test-role' });
-
-    role.addPermission(permission);
-    await permission.delete();
-
-    if (role.hasPermission('test-permission')) {
-      return Promise.reject('Role still has permission');
-    } else {
-      return Promise.resolve();
-    }
-  });
-
   it('role should not be able to inherit itself', async function() {
     let instance = new Gelert();
     let roleA = await instance.createRole({ name: 'test-role-a' });
@@ -151,26 +136,6 @@ describe('gelert', function() {
 
     if (roleA.hasPermission('test-permission')) {
       return Promise.reject('Role has permission');
-    } else {
-      return Promise.resolve();
-    }
-  });
-
-  it('should not have permission from a second role in the inheritance tree when the permission is deleted', async function() {
-    let instance = new Gelert();
-    let permission = await instance.createPermission({ name: 'test-permission' });
-    let roleA = await instance.createRole({ name: 'test-role-a' });
-    let roleB = await instance.createRole({ name: 'test-role-b' });
-    let roleC = await instance.createRole({ name: 'test-role-b' });
-
-    roleA.addPermission(permission);
-    roleB.addInheritance(roleA);
-    roleC.addInheritance(roleB);
-
-    await permission.delete();
-
-    if (roleC.hasPermission('test-permission')) {
-      return Promise.reject('Role still has permission');
     } else {
       return Promise.resolve();
     }
