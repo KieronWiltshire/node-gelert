@@ -8,7 +8,7 @@ A permission evaluation module for simple permission checking.
 
 The package exposes methods to create and manage roles and permissions within your application.
 It allows the providing of a custom storage strategy implementation allowing you to persist your
-roles / permissions however you see fit.
+roles / permissions however you see fit. An empty *storage strategy interface* can be found [here](https://github.com/KieronWiltshire/node-gelert/wiki/Empty-Strategy).
 
 ## Basic usage
 
