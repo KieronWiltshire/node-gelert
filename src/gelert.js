@@ -34,8 +34,6 @@ export default class Gelert {
    */
   constructor(options) {
     this.options = Gelert.gelert_ValidateOptions(options);
-    this.getPermissions();
-    this.getRoles();
   }
 
   /**
