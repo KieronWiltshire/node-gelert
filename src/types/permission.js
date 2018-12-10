@@ -1,97 +1,25 @@
 'use strict';
 
 import uuidv4 from 'uuid/v4';
-import EventEmitter from 'events';
-import {
-  GelertError,
-  ErrorCode
-} from '../errors';
 
-/**
- * Error codes.
- */
-export const nameMustExist = new ErrorCode('name_must_exist', { message: 'A permission value must have a name' });
-export const nameMustBeString = new ErrorCode('name_must_be_string', { message: 'The specified name is not of type string' });
-export const parametersMustBeObject = new ErrorCode('parameters_must_be_object', { message: 'Parameters must be specified and wrapped in an object' });
-
-export default class Permission extends EventEmitter {
+export default class Permission {
 
   /**
-   * Create a new permission instance.
+   * Create a new instance of {Permission}.
    *
-   * @param {object} params
+   * @param {any} id
+   * @param {any} context
    */
-  constructor(params, storage) {
-    super();
-    const self = this;
-    const valid = Permission.permission_ValidateParameters(params);
-
-    this._storageStrategy = storage;
-
-    Object.keys(valid).forEach(function(p) {
-      self[p] = valid[p];
-    });
+  constructor({ id, context }) {
+    this.id = id;
+    this.context = context;
 
     if (!this.id) {
       this.id = uuidv4();
     }
 
-    EventEmitter.call(this);
-    this.emit('create', this);
-  }
-
-  /**
-   * Validate the parameters supplied.
-   *
-   * @param {object} params
-   * @returns {object} params if valid
-   * @throws {GelertError} if params are invalid
-   */
-  static permission_ValidateParameters(params) {
-    if (typeof params === 'object') {
-      if (params.name) {
-        if (typeof params.name !== 'string') {
-          throw new GelertError().push(nameMustBeString);
-        }
-      } else {
-        throw new GelertError().push(nameMustExist);
-      }
-
-      return params;
-    } else {
-      throw new GelertError().push(parametersMustBeObject);
-    }
-  }
-
-  /**
-   * Save the permission.
-   *
-   * @returns {boolean} true if the permission was saved successfully
-   */
-  async save() {
-    try {
-      let result = await this._storageStrategy.savePermission(this);
-      this.emit('save', this);
-
-      return Promise.resolve(result);
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  }
-
-  /**
-   * Delete the permission.
-   *
-   * @returns {boolean} true if the permission was saved successfully
-   */
-  async delete() {
-    try {
-      let result = await this._storageStrategy.deletePermission(this);
-      this.emit('delete', this);
-
-      return Promise.resolve(result);
-    } catch (error) {
-      return Promise.reject(error);
+    if (!this.context) {
+      throw new Error('Unable to create a permission without a context');
     }
   }
 
@@ -103,9 +31,9 @@ export default class Permission extends EventEmitter {
    */
   equals(value) {
     if (value instanceof Permission) {
-      return (this.id === value.id || this.name === value.name);
+      return (this.id === value.id || this.context === value.context);
     } else {
-      return ((typeof value === 'string' || typeof value === 'number') && (this.id === value || this.name === value))
+      return ((typeof value === 'string' || typeof value === 'number') && (this.id === value || this.context === value))
     }
   }
 

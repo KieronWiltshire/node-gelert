@@ -5,27 +5,26 @@
   "main": "./build/gelert.js",
   "files": [
     "build",
-    "build-test",
     "src",
     "test"
   ],
   "scripts": {
     "build": "gulp build",
-    "test": "mocha ./test/exec.js --compilers js:babel-core/register"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/kieronwiltshire/node-gelert.git"
+    "test": "mocha ./test/main.js --compilers js:babel-core/register"
   },
   "author": "Kieron Wiltshire",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kieronwiltshire/node-gelert.git"
+  },
   "bugs": {
     "url": "https://github.com/kieronwiltshire/node-gelert/issues"
   },
   "homepage": "https://github.com/kieronwiltshire/node-gelert#readme",
   "dependencies": {
     "lodash": "^4.17.4",
-    "uuid": "^3.1.0"
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
