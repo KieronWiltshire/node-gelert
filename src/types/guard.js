@@ -14,7 +14,7 @@ export default class Guard {
   constructor({ id, type }) {
     this._id = id;
     this._type = type;
-    this._inheritance = [];
+    this._guards = [];
 
     if (!this.id) {
       this.id = uuidv4();
@@ -31,7 +31,7 @@ export default class Guard {
    * @returns {Array}
    */
   guards() {
-    return _.clone(this._inheritance);
+    return _.clone(this._guards);
   }
 
   /**
@@ -46,7 +46,7 @@ export default class Guard {
         throw new Error('The Object must be an instance of {Guard}');
       }
 
-      this._inheritance.push(guard);
+      this._guards.push(guard);
 
       return true;
     } else {
@@ -62,9 +62,9 @@ export default class Guard {
    */
   removeGuard(guard) {
     if (this.containsGuard(guard)) {
-      for (let i = 0; i < this._inheritance.length; i++) {
-        if (this._inheritance[i].equals(guard)) {
-          this._inheritance.splice(this._inheritance.indexOf(guard), 1);
+      for (let i = 0; i < this._guards.length; i++) {
+        if (this._guards[i].equals(guard)) {
+          this._guards.splice(this._guards.indexOf(guard), 1);
           return true;
         }
       }
@@ -80,8 +80,8 @@ export default class Guard {
    * @throws {Error} if the parameter is not an instance of {Guard}
    */
   containsGuard(guard) {
-    for (let i = 0; i < this._inheritance.length; i++) {
-      if (this._inheritance[i].equals(guard)) {
+    for (let i = 0; i < this._guards.length; i++) {
+      if (this._guards[i].equals(guard)) {
         return true;
       }
     }
@@ -97,7 +97,7 @@ export default class Guard {
   doesInherit(guard) {
     let hasChild = this.containsGuard(guard);
     if (!hasChild) {
-      this._inheritance.forEach(function(r) {
+      this._guards.forEach(function(r) {
         if (r.doesInherit(guard)) {
           hasChild = true;
           return;
@@ -116,7 +116,7 @@ export default class Guard {
   hasPermission(value) {
     let hasPermission = super.hasPermission(value);
     if (!hasPermission) {
-      this._inheritance.forEach(function(r) {
+      this._guards.forEach(function(r) {
         if (r.hasPermission(value)) {
           hasPermission = true;
           return;
