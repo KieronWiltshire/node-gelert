@@ -10,30 +10,54 @@ export default class Permission {
    * @param {any} id
    * @param {any} context
    */
-  constructor({ id, context }) {
-    this.id = id;
-    this.context = context;
+  constructor(value) {
+    this.value = value
 
-    if (!this.id) {
-      this.id = uuidv4();
+    if (!this.value) {
+      throw new Error('Unable to create a permission without a value');
     }
+  }
 
-    if (!this.context) {
-      throw new Error('Unable to create a permission without a context');
-    }
+  /**
+   * Retrieve the permission value.
+   *
+   * @returns {string|number}
+   */
+  getValue() {
+    return this.value;
+  }
+
+  /**
+   * Check if a value is greater than the permission instance value.
+   *
+   * @param {Permission} permission
+   * @returns {boolean} true if the specified value if greater than the permission instance value
+   */
+  greaterThan(permission) {
+    // TODO:
+  }
+
+  /**
+   * Check if a value is less than the permission instance value.
+   *
+   * @param {Permission} permission
+   * @returns {boolean} true if the specified value if less than the permission instance value
+   */
+  lessThan(permission) {
+    // TODO:
   }
 
   /**
    * Check if a value is equal to the permission.
    *
-   * @param {Permission} value
+   * @param {Permission} permission
    * @returns {boolean} true if they are the same
    */
-  equals(value) {
-    if (value instanceof Permission) {
-      return (this.id === value.id || this.context === value.context);
+  equals(permission) {
+    if (permission instanceof Permission) {
+      return (this.value === permission.value);
     } else {
-      return ((typeof value === 'string' || typeof value === 'number') && (this.id === value || this.context === value))
+      return ((typeof permission === 'string' || typeof permission === 'number') && (this.value === permission))
     }
   }
 
