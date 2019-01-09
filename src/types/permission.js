@@ -1,17 +1,18 @@
 'use strict';
 
-import uuidv4 from 'uuid/v4';
-
 export default class Permission {
 
   /**
    * Create a new instance of {Permission}.
    *
-   * @param {any} id
-   * @param {any} context
+   * @param {string} value
    */
   constructor(value) {
-    this.value = value
+    if (typeof value === 'string') {
+      this.value = value;
+    } else {
+      throw new Error('The specified value must be of type string');
+    }
 
     if (!this.value) {
       throw new Error('Unable to create a permission without a value');
@@ -21,7 +22,7 @@ export default class Permission {
   /**
    * Retrieve the permission value.
    *
-   * @returns {string|number}
+   * @returns {string}
    */
   getValue() {
     return this.value;
@@ -34,7 +35,28 @@ export default class Permission {
    * @returns {boolean} true if the specified value if greater than the permission instance value
    */
   greaterThan(permission) {
-    // TODO:
+    if (permission instanceof Permission) {
+      permission = permission.getValue();
+    }
+
+    if (typeof permission === 'string') {
+      let a = permission.split('.');
+      let b = this.getValue().split('.');
+
+      for (let i = 0; i < a.length; i++) {
+        if (i < b.length) {
+          if (a[i] !== b[i]) {
+            if (a[i] === '*') {
+              return true;
+            }
+          }
+        } else {
+          break;
+        }
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -44,7 +66,19 @@ export default class Permission {
    * @returns {boolean} true if the specified value if less than the permission instance value
    */
   lessThan(permission) {
-    // TODO:
+    if (permission instanceof Permission) {
+      permission = permission.getValue();
+    }
+
+    if (typeof permission === 'string') {
+      if (this.equals(permission) || this.greaterThan(permission)) {
+        if (permission.charAt(0) === '-') {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -57,7 +91,7 @@ export default class Permission {
     if (permission instanceof Permission) {
       return (this.value === permission.value);
     } else {
-      return ((typeof permission === 'string' || typeof permission === 'number') && (this.value === permission))
+      return (typeof permission === 'string' && this.value === permission)
     }
   }
 

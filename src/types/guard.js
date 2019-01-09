@@ -178,15 +178,19 @@ export default class Guard {
    */
   hasPermission(value) {
     for (let i = 0; i < this._permissions.length; i++) {
-      if (this._permissions[i].equals(value)) {
-        return true;
-      }
+      // TODO:
+
+      // if (this._permissions[i].equals(value)) {
+      //   return true;
+      // }
     }
 
     for (let i = 0; i < this._guards.length; i++) {
-      if (this._guards[i].hasPermission(value)) {
-        return true;
-      }
+      // TODO:
+
+      // if (this._guards[i].hasPermission(value)) {
+      //   return true;
+      // }
     }
 
     return false;
