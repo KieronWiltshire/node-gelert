@@ -176,27 +176,40 @@ export default class Guard {
    * This method trickles down it's inheritence and priorities
    * the higher assigned permission.
    *
-   * @param {Permission|string|number} value
+   * @param {Permission|string} permission
    * @returns {boolean} true if permission is granted
    */
-  hasPermission(value) {
-    for (let i = 0; i < this._guards.length; i++) {
-      // TODO:
+  hasPermission(permission) {
+    if (!(permission instanceof Permission)) {
+      throw new Error('The specified value must be an instance of {Permission}');
+    }
 
-      // if (this._guards[i].hasPermission(value)) {
-      //   return true;
-      // }
+    let can = false;
+
+    for (let i = 0; i < this._guards.length; i++) {
+      if (this._guards[i].hasPermission(permission)) {
+        can = true;
+        break;
+      }
     }
 
     for (let i = 0; i < this._permissions.length; i++) {
-      // TODO:
+      if (p.isNegated() && p.equals(permission.getNegatedValue())) {
+        can = false;
+        break;
+      }
 
-      // if (this._permissions[i].equals(value)) {
-      //   return true;
-      // }
+      if (!can) {
+        let p = this._permissions[i];
+
+        if (p.equals(permission.getValue())) {
+          can = true;
+          break;
+        }
+      }
     }
 
-    return false;
+    return can;
   }
 
 }

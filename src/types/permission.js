@@ -9,7 +9,17 @@ export default class Permission {
    */
   constructor(value) {
     if (typeof value === 'string') {
-      this.value = value;
+      negated = false;
+
+      if (value.chatAt(0) === '-') {
+        negated = true;
+      }
+
+      while (value.charAt(0) === '-') {
+        value = value.substr(1);
+      }
+
+      this.value = (negated) ? ('-' + value) : value;
     } else {
       throw new Error('The specified value must be of type string');
     }
@@ -25,20 +35,31 @@ export default class Permission {
    * @returns {string}
    */
   getValue() {
-    return this.value;
+    return (this.isNegated() ? this.value.substr(1) : this.value);
   }
 
   /**
-   * Check if a value is a super of the permission instance value.
+   * Retrieve the negated value.
+   *
+   * @returns {string}
+   */
+  getNegatedValue() {
+    return (this.isNegated() ? this.getValue() : ('-' + this.getValue()))
+  }
+
+  /**
+   * Check if a value is a super of the specified permission.
    *
    * @param {Permission} permission
    * @returns {boolean} true if the specified value if greater than the permission instance value
    */
   isSuper(permission) {
-    if (permission instanceof Permission) {
-      permission = permission.getValue();
-    } else {
-      throw new Error('The specified value must be an instance of {Permission}');
+    if (typeof permission !== 'string') {
+      if (permission instanceof Permission) {
+        permission = permission.getValue();
+      } else {
+        throw new Error('The specified value must be an instance of {Permission}');
+      }
     }
 
     if (typeof permission === 'string') {
