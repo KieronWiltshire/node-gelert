@@ -173,22 +173,25 @@ export default class Guard {
   /**
    * Check if the guard has a permission.
    *
+   * This method trickles down it's inheritence and priorities
+   * the higher assigned permission.
+   *
    * @param {Permission|string|number} value
    * @returns {boolean} true if permission is granted
    */
   hasPermission(value) {
-    for (let i = 0; i < this._permissions.length; i++) {
-      // TODO:
-
-      // if (this._permissions[i].equals(value)) {
-      //   return true;
-      // }
-    }
-
     for (let i = 0; i < this._guards.length; i++) {
       // TODO:
 
       // if (this._guards[i].hasPermission(value)) {
+      //   return true;
+      // }
+    }
+
+    for (let i = 0; i < this._permissions.length; i++) {
+      // TODO:
+
+      // if (this._permissions[i].equals(value)) {
       //   return true;
       // }
     }

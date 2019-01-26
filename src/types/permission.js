@@ -29,19 +29,21 @@ export default class Permission {
   }
 
   /**
-   * Check if a value is greater than the permission instance value.
+   * Check if a value is a super of the permission instance value.
    *
    * @param {Permission} permission
    * @returns {boolean} true if the specified value if greater than the permission instance value
    */
-  greaterThan(permission) {
+  isSuper(permission) {
     if (permission instanceof Permission) {
       permission = permission.getValue();
+    } else {
+      throw new Error('The specified value must be an instance of {Permission}');
     }
 
     if (typeof permission === 'string') {
-      let a = permission.split('.');
-      let b = this.getValue().split('.');
+      let a = this.getValue().split('.');
+      let b = permission.split('.');
 
       for (let i = 0; i < a.length; i++) {
         if (i < b.length) {
@@ -60,25 +62,12 @@ export default class Permission {
   }
 
   /**
-   * Check if a value is less than the permission instance value.
+   * Check if the permission value of the class is negated.
    *
-   * @param {Permission} permission
-   * @returns {boolean} true if the specified value if less than the permission instance value
+   * @returns {boolean} true if the specified value if negated
    */
-  lessThan(permission) {
-    if (permission instanceof Permission) {
-      permission = permission.getValue();
-    }
-
-    if (typeof permission === 'string') {
-      if (this.equals(permission) || this.greaterThan(permission)) {
-        if (permission.charAt(0) === '-') {
-          return true;
-        }
-      }
-    }
-
-    return false;
+  isNegated() {
+    return (this.getValue().charAt(0) === '-');
   }
 
   /**
