@@ -17,13 +17,35 @@ export default class Guard {
     this._guards = [];
     this._permissions = [];
 
-    if (!this.id) {
-      this.id = uuidv4();
+    if (!this._id) {
+      this._id = uuidv4();
     }
 
-    if (!this.type) {
+    if (!this._type) {
       throw new Error('Unable to create a guard without specifying it\'s type');
     }
+
+    if (typeof this._type !== 'string') {
+      throw new Error('The specified type must be a string');
+    }
+  }
+
+  /**
+   * Retrieve the guard identifier.
+   *
+   * @return {any}
+   */
+  getId() {
+    return this._id;
+  }
+
+  /**
+   * Retrieve the guard type.
+   *
+   * @return {string}
+   */
+  getType() {
+    return this._type;
   }
 
   /**
@@ -176,7 +198,7 @@ export default class Guard {
    * This method trickles down it's inheritence and priorities
    * the higher assigned permission.
    *
-   * @param {Permission|string} permission
+   * @param {Permission} permission
    * @returns {boolean} true if permission is granted
    */
   hasPermission(permission) {

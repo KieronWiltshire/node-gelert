@@ -3,8 +3,9 @@
 import Guard from './types/guard';
 import Permission from './types/permission';
 
-export const Guard;
-export const Permission;
+export {
+  Guard, Permission
+};
 
 export default {
   Guard, Permission
