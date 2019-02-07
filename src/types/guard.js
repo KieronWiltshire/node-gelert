@@ -218,15 +218,14 @@ export default class Guard {
     for (let i = 0; i < this._permissions.length; i++) {
       let p = this._permissions[i];
 
-      if (!permission.isNegated() && (p.isNegated() && p.equals(permission.getNegatedValue()))) {
+      if (permission.isNegated() && permission.equals(p)) {
         can = false;
         break;
       }
 
       if (!can) {
-        if (p.equals(permission.getValue())) {
+        if (!permission.isNegated() && p.equals(permission.getValue()) || p.isSuper(permission)) {
           can = true;
-          break;
         }
       }
     }
