@@ -255,30 +255,33 @@ describe('gelert', function() {
   it('should add a super permission to a {Guard} and check if it has access to the permission subset', async function() {
     let role = new Guard({ type: 'role' });
     let permission = new Permission('my.test.*');
+    let subPermission = new Permission('my.test.permission');
 
     Chai.expect(role.containsPermission(permission)).to.be.false;
-    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.containsPermission(subPermission)).to.be.false;
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.true;
-    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.containsPermission(subPermission)).to.be.false;
     Chai.expect(role.hasPermission(permission)).to.be.true;
-    Chai.expect(role.hasPermission('my.test.permission')).to.be.true;
+    Chai.expect(role.hasPermission(subPermission)).to.be.true;
   });
 
   it('should add a top level super permission and check if the guard has access to any subset permission', async function() {
     let role = new Guard({ type: 'role' });
     let permission = new Permission('*');
+    let subPermission = new Permission('my.test.permission');
+    let subPermission2 = new Permission('test');
 
     Chai.expect(role.containsPermission(permission)).to.be.false;
-    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
-    Chai.expect(role.containsPermission('test')).to.be.false;
+    Chai.expect(role.containsPermission(subPermission)).to.be.false;
+    Chai.expect(role.containsPermission(subPermission2)).to.be.false;
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.true;
-    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
-    Chai.expect(role.containsPermission('test')).to.be.false;
+    Chai.expect(role.containsPermission(subPermission)).to.be.false;
+    Chai.expect(role.containsPermission(subPermission2)).to.be.false;
     Chai.expect(role.hasPermission(permission)).to.be.true;
-    Chai.expect(role.hasPermission('my.test.permission')).to.be.true;
-    Chai.expect(role.hasPermission('test')).to.be.true;
+    Chai.expect(role.hasPermission(subPermission)).to.be.true;
+    Chai.expect(role.hasPermission(subPermission2)).to.be.true;
   });
 
   it('should add both a negative and positive permission to a {Guard} and fail if it has access to the permission as negative permissions are valued higher', async function() {
@@ -287,15 +290,53 @@ describe('gelert', function() {
     let negativePermission = new Permission('-my.test.permission');
 
     Chai.expect(role.containsPermission(permission)).to.be.false;
-    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.true;
 
     Chai.expect(role.containsPermission(negativePermission)).to.be.false;
-    Chai.expect(role.containsPermission('-my.test.permission')).to.be.false;
     Chai.expect(role.addPermission(negativePermission)).to.be.true;
     Chai.expect(role.containsPermission(negativePermission)).to.be.true;
 
     Chai.expect(role.hasPermission(permission)).to.be.false;
   });
+
+  it('should add a super negative permission and a positive permission to a {Guard} and it should still have access to the permission as negative super permissions should not be allowed', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('my.test.permission');
+    let negativePermission = new Permission('-my.test.*');
+
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.addPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission(permission)).to.be.true;
+
+    Chai.expect(role.containsPermission(negativePermission)).to.be.false;
+    Chai.expect(role.addPermission(negativePermission)).to.be.true;
+    Chai.expect(role.containsPermission(negativePermission)).to.be.true;
+
+    Chai.expect(role.hasPermission(permission)).to.be.true;
+  });
+
+  it('should add super positive permission and a negative permission to a {Guard} and it should not have access to the permission as negative permissions are valued higher', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('my.*');
+    let negativePermission = new Permission('-my.test.permission');
+    let subPermission = new Permission('my.test.permission');
+    let subPermission2 = new Permission('my.other.permission');
+
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.addPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission(permission)).to.be.true;
+
+    Chai.expect(role.containsPermission(negativePermission)).to.be.false;
+    Chai.expect(role.addPermission(negativePermission)).to.be.true;
+    Chai.expect(role.containsPermission(negativePermission)).to.be.true;
+
+    Chai.expect(role.containsPermission(subPermission)).to.be.false;
+
+    Chai.expect(role.hasPermission(permission)).to.be.true;
+    Chai.expect(role.hasPermission(subPermission)).to.be.false;
+    Chai.expect(role.hasPermission(subPermission2)).to.be.true;
+  });
+
+  // TODO: test inheritence
 });
