@@ -9,16 +9,20 @@ export default class Permission {
    */
   constructor(value) {
     if (typeof value === 'string') {
-      while (value.charAt(0) === '-') {
-        value = value.substr(1);
-      }
+      this._value = value;
 
-      this.value = value;
+      if (this.isNegated()) {
+        while (value.charAt(0) === '-') {
+          value = value.substr(1);
+        }
+
+        this._value = '-' + value;
+      }
     } else {
       throw new Error('The specified value must be of type string');
     }
 
-    if (!this.value) {
+    if (!this._value) {
       throw new Error('Unable to create a permission without a value');
     }
   }
@@ -29,7 +33,7 @@ export default class Permission {
    * @returns {string}
    */
   getValue() {
-    return (this.isNegated() ? this.value.substr(1) : this.value);
+    return this._value;
   }
 
   /**
@@ -38,7 +42,16 @@ export default class Permission {
    * @returns {boolean} true if the specified value if negated
    */
   isNegated() {
-    return (this.value.charAt(0) === '-');
+    return (this.getValue().charAt(0) === '-');
+  }
+
+  /**
+   * Retrieve the permission value.
+   *
+   * @returns {string}
+   */
+  getPositiveValue() {
+    return (this.isNegated() ? this.getValue().substr(1) : this.getValue());
   }
 
   /**
@@ -93,9 +106,9 @@ export default class Permission {
    */
   equals(permission) {
     if (permission instanceof Permission) {
-      return (this.value === permission.value);
+      return (this.getValue() === permission.getValue());
     } else {
-      return (typeof permission === 'string' && this.value === permission)
+      return (typeof permission === 'string' && this.getValue() === permission)
     }
   }
 
