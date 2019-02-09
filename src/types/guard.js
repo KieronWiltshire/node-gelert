@@ -88,7 +88,7 @@ export default class Guard {
     if (this.containsGuard(guard)) {
       for (let i = 0; i < this._guards.length; i++) {
         if (this._guards[i] === guard) {
-          this._guards.splice(this._guards.indexOf(guard), 1);
+          this._guards.splice(i, 1);
           return true;
         }
       }
@@ -169,7 +169,7 @@ export default class Guard {
     if (this.containsPermission(permission)) {
       for (let i = 0; i < this._permissions.length; i++) {
         if (this._permissions[i].equals(permission)) {
-          this._permissions.splice(this._permissions.indexOf(guard), 1);
+          this._permissions.splice(i, 1);
           return true;
         }
       }
@@ -203,7 +203,11 @@ export default class Guard {
    */
   hasPermission(permission) {
     if (!(permission instanceof Permission)) {
-      throw new Error('The specified value must be an instance of {Permission}');
+      if (typeof permission !== 'string') {
+        throw new Error('The specified value must be an instance of {Permission} or of type "string"');
+      } else {
+        permission = new Permission(permission);
+      }
     }
 
     let can = false;
@@ -218,15 +222,12 @@ export default class Guard {
     for (let i = 0; i < this._permissions.length; i++) {
       let p = this._permissions[i];
 
-      if (permission.isNegated() && permission.equals(p)) {
-        can = false;
-        break;
+      if (p.isNegated() && permission.getNegativeValue(p)) {
+        return false;
       }
 
-      if (!can) {
-        if (!permission.isNegated() && p.equals(permission.getValue()) || p.isSuper(permission)) {
-          can = true;
-        }
+      if (p.equals(permission.getValue()) || p.isSuper(permission)) {
+        can = true;
       }
     }
 

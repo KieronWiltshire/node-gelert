@@ -37,8 +37,8 @@ describe('gelert', function() {
     Chai.expect(permission.getValue()).to.equal('my.test.permission');
     Chai.expect(permission.getPositiveValue()).to.be.a('string');
     Chai.expect(permission.getPositiveValue()).to.equal('my.test.permission');
-    Chai.expect(permission.getNegatedValue()).to.be.a('string');
-    Chai.expect(permission.getNegatedValue()).to.equal('-my.test.permission');
+    Chai.expect(permission.getNegativeValue()).to.be.a('string');
+    Chai.expect(permission.getNegativeValue()).to.equal('-my.test.permission');
   });
 
   it('should create a new instance of {Permission} specifying a "negative" value', async function() {
@@ -48,8 +48,8 @@ describe('gelert', function() {
     Chai.expect(permission.getValue()).to.equal('-my.test.permission');
     Chai.expect(permission.getPositiveValue()).to.be.a('string');
     Chai.expect(permission.getPositiveValue()).to.equal('my.test.permission');
-    Chai.expect(permission.getNegatedValue()).to.be.a('string');
-    Chai.expect(permission.getNegatedValue()).to.equal('-my.test.permission');
+    Chai.expect(permission.getNegativeValue()).to.be.a('string');
+    Chai.expect(permission.getNegativeValue()).to.equal('-my.test.permission');
   });
 
   it('should create a new instance of {Permission} and check against it\'s super values', async function() {
@@ -63,29 +63,29 @@ describe('gelert', function() {
     Chai.expect(permission.getValue()).to.equal('my.test.permission');
     Chai.expect(permission.getPositiveValue()).to.be.a('string');
     Chai.expect(permission.getPositiveValue()).to.equal('my.test.permission');
-    Chai.expect(permission.getNegatedValue()).to.be.a('string');
-    Chai.expect(permission.getNegatedValue()).to.equal('-my.test.permission');
+    Chai.expect(permission.getNegativeValue()).to.be.a('string');
+    Chai.expect(permission.getNegativeValue()).to.equal('-my.test.permission');
 
     Chai.expect(superPermission.getValue()).to.be.a('string');
     Chai.expect(superPermission.getValue()).to.equal('my.test.*');
     Chai.expect(superPermission.getPositiveValue()).to.be.a('string');
     Chai.expect(superPermission.getPositiveValue()).to.equal('my.test.*');
-    Chai.expect(superPermission.getNegatedValue()).to.be.a('string');
-    Chai.expect(superPermission.getNegatedValue()).to.equal('-my.test.*');
+    Chai.expect(superPermission.getNegativeValue()).to.be.a('string');
+    Chai.expect(superPermission.getNegativeValue()).to.equal('-my.test.*');
 
     Chai.expect(superPermission2.getValue()).to.be.a('string');
     Chai.expect(superPermission2.getValue()).to.equal('my.*');
     Chai.expect(superPermission2.getPositiveValue()).to.be.a('string');
     Chai.expect(superPermission2.getPositiveValue()).to.equal('my.*');
-    Chai.expect(superPermission2.getNegatedValue()).to.be.a('string');
-    Chai.expect(superPermission2.getNegatedValue()).to.equal('-my.*');
+    Chai.expect(superPermission2.getNegativeValue()).to.be.a('string');
+    Chai.expect(superPermission2.getNegativeValue()).to.equal('-my.*');
 
     Chai.expect(superPermission3.getValue()).to.be.a('string');
     Chai.expect(superPermission3.getValue()).to.equal('*');
     Chai.expect(superPermission3.getPositiveValue()).to.be.a('string');
     Chai.expect(superPermission3.getPositiveValue()).to.equal('*');
-    Chai.expect(superPermission3.getNegatedValue()).to.be.a('string');
-    Chai.expect(superPermission3.getNegatedValue()).to.equal('-*');
+    Chai.expect(superPermission3.getNegativeValue()).to.be.a('string');
+    Chai.expect(superPermission3.getNegativeValue()).to.equal('-*');
 
     Chai.expect(superPermission3.isSuper(superPermission2)).to.be.true;
     Chai.expect(superPermission3.isSuper(superPermission)).to.be.true;
@@ -134,4 +134,168 @@ describe('gelert', function() {
     Chai.expect(role.getId()).to.be.a.uuid('v4');
   });
 
+  it('should fail attempting to add a permission to a {Guard} that is anything other than an instance of {Permission}', function(done) {
+    let role = new Guard({ type: 'role' });
+
+    try {
+      role.addPermission('my.test.permission');
+      done(new Error('An instance of {Guard} accepted a permission that was not of a {Permission} instance'));
+    } catch (error) {
+      done();
+    }
+  });
+
+  it('should add a permission to {Guard} if it\'s an instance of {Permission}', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('my.test.permission');
+
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.addPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission(permission)).to.be.true;
+  });
+
+  it('should fail attempting to remove a permission from a {Guard} that doesn\'t exist using a {Permission} instance', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('my.test.permission');
+
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.removePermission(permission)).to.be.false;
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+  });
+
+  it('should remove a permission from a {Guard} using an equal {Permission} instance', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('my.test.permission');
+
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.addPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.removePermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+  });
+
+  it('should fail attempting to remove a permission from a {Guard} that doesn\'t exist using a string representation of a {Permission}', async function() {
+    let role = new Guard({ type: 'role' });
+
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.removePermission('my.test.permission')).to.be.false;
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+  });
+
+  it('should remove a permission from a {Guard} that using a string representation of a {Permission}', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('my.test.permission');
+
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.addPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.true;
+    Chai.expect(role.removePermission('my.test.permission')).to.be.true;
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+  });
+
+  it('should add a permission to a {Guard} and check if it has access to the specified permission', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('my.test.permission');
+
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.addPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.hasPermission(permission)).to.be.true;
+  });
+
+  it('should remove a permission from a {Guard} and check if it has access to the specified permission', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('my.test.permission');
+
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.addPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.hasPermission(permission)).to.be.true;
+    Chai.expect(role.removePermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.hasPermission(permission)).to.be.false;
+  });
+
+  it('should add a permission to a {Guard} and check if it has access to the specified permission using a string representation of a {Permission}', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('my.test.permission');
+
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.addPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.true;
+    Chai.expect(role.hasPermission('my.test.permission')).to.be.true;
+  });
+
+  it('should remove a permission from a {Guard} and check if it has access to the specifed permission', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('my.test.permission');
+
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.addPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.hasPermission(permission)).to.be.true;
+    Chai.expect(role.removePermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.hasPermission(permission)).to.be.false;
+  });
+
+  it('should create a new instance of {Guard} and remove a permission and check if the guard has access to the permission it\'s string representation', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('my.test.permission');
+
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.addPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.true;
+    Chai.expect(role.hasPermission('my.test.permission')).to.be.true;
+    Chai.expect(role.removePermission('my.test.permission')).to.be.true;
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.hasPermission('my.test.permission')).to.be.false;
+  });
+
+  it('should add a super permission to a {Guard} and check if it has access to the permission subset', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('my.test.*');
+
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.addPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.hasPermission(permission)).to.be.true;
+    Chai.expect(role.hasPermission('my.test.permission')).to.be.true;
+  });
+
+  it('should add a top level super permission and check if the guard has access to any subset permission', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('*');
+
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.containsPermission('test')).to.be.false;
+    Chai.expect(role.addPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.containsPermission('test')).to.be.false;
+    Chai.expect(role.hasPermission(permission)).to.be.true;
+    Chai.expect(role.hasPermission('my.test.permission')).to.be.true;
+    Chai.expect(role.hasPermission('test')).to.be.true;
+  });
+
+  it('should add both a negative and positive permission to a {Guard} and fail if it has access to the permission as negative permissions are valued higher', async function() {
+    let role = new Guard({ type: 'role' });
+    let permission = new Permission('my.test.permission');
+    let negativePermission = new Permission('-my.test.permission');
+
+    Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.addPermission(permission)).to.be.true;
+    Chai.expect(role.containsPermission(permission)).to.be.true;
+
+    Chai.expect(role.containsPermission(negativePermission)).to.be.false;
+    Chai.expect(role.containsPermission('-my.test.permission')).to.be.false;
+    Chai.expect(role.addPermission(negativePermission)).to.be.true;
+    Chai.expect(role.containsPermission(negativePermission)).to.be.true;
+
+    Chai.expect(role.hasPermission(permission)).to.be.false;
+  });
 });

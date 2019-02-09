@@ -59,7 +59,7 @@ export default class Permission {
    *
    * @returns {string}
    */
-  getNegatedValue() {
+  getNegativeValue() {
     return (this.isNegated() ? this.getValue() : ('-' + this.getValue()))
   }
 
@@ -106,7 +106,7 @@ export default class Permission {
    */
   equals(permission) {
     if (permission instanceof Permission) {
-      return (this.getValue() === permission.getValue());
+      return (this.equals(permission.getValue()));
     } else {
       return (typeof permission === 'string' && this.getValue() === permission)
     }
