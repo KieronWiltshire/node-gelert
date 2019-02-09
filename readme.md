@@ -6,79 +6,15 @@ A permission evaluation module for simple permission checking.
 
 ## Introduction
 
-The package exposes methods to create and manage roles and permissions within your application.
-It allows the providing of a custom storage strategy implementation allowing you to persist your
-roles / permissions however you see fit. An empty **storage strategy interface** can be found [here](https://github.com/KieronWiltshire/node-gelert/wiki/Empty-Strategy).
+Basic introduction
 
 ## Basic usage
 
-Gelert can be instantiated with or without options. If no options are specified then
-the default parameters are used.
-
-```JavaScript
-const Gelert = require('gelert');
-const GelertSQLStrategy = require('gelert-sql-strategy');
-const knexFile = require('./knexfile.js');
-const knex = require('knex')(knexFile);
-
-const gelert = new Gelert({
-  storage: new GelertSQLStrategy(knex)
-});
-```
-
-#### options
-
-`options.storage` - Storage Strategy implementation
+Basic usage
 
 #### example usage
 
 Basic permission handling
-
-```JavaScript
-const Gelert = require('gelert');
-const gelert = new Gelert();
-
-let testPermission = gelert.createPermission({ name: 'test-permission' }); // Permissions require a name. These should be unique.
-let testRole = gelert.createRole({ name: 'test-role' }); // Permissibles such as roles require a name. These should be unique.
-
-testRole.addPermission(testPermission);
-
-console.log(testRole.hasPermission('test-permission')) // true
-console.log(testRole.hasPermission('dummy-permission')) // false
-
-testRole.removePermission(testPermission);
-
-console.log(testRole.hasPermission('test-permission')) // false
-```
-
-Basic role inheritance
-
-```JavaScript
-const Gelert = require('gelert');
-const gelert = new Gelert();
-
-let testPermission = gelert.createPermission({ name: 'test-permission' }); // Permissions require a name. These should be unique.
-let testRole = gelert.createRole({ name: 'test-role' }); // Permissibles such as roles require a name. These should be unique.
-
-testRole.addPermission(testPermission);
-
-let testRoleTwo = gelert.createRole({ name: 'test-role2' }); // Permissibles such as roles require a name. These should be unique.
-
-testRoleTwo.addInheritance(testRole);
-
-console.log(testRole.hasPermission('test-permission')) // true
-console.log(testRoleTwo.hasPermission('test-permission')) // true
-
-console.log(testRole.hasPermission('dummy-permission')) // false
-console.log(testRoleTwo.hasPermission('dummy-permission')) // false
-
-testRole.removePermission(testPermission);
-
-console.log(testRole.hasPermission('test-permission')) // false
-console.log(testRoleTwo.hasPermission('test-permission')) // false
-
-testRoleTwo.removeInheritance(testRole);
-```
 
 ## Contributing
 
