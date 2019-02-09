@@ -104,7 +104,7 @@ export default class Guard {
    */
   containsGuard(guard) {
     for (let i = 0; i < this._guards.length; i++) {
-      if (this._guards[i] === guard) {
+      if (this._guards[i].equals(guard)) {
         return true;
       }
     }
@@ -232,6 +232,16 @@ export default class Guard {
     }
 
     return can;
+  }
+
+  /**
+   * Check if a guard is equal to the guard.
+   *
+   * @param {Guard} guard
+   * @returns {boolean} true if they are the same
+   */
+  equals(guard) {
+    return ((guard instanceof Guard) && (guard.getId() === this.getId()) && (guard.getType() === this.getType()));
   }
 
 }
