@@ -15,7 +15,7 @@ describe('gelert', function() {
   it('should not create a new instance of {Guard} without specifying a type', function(done) {
     try {
       new Guard();
-      done(new Error('An instance of guard was created without specifying a type'));
+      done(new Error('An instance of {Guard} was created without specifying a type'));
     } catch (error) {
       done();
     }
@@ -24,7 +24,7 @@ describe('gelert', function() {
   it('should not create a new instance of {Guard} specifying a type as anything other than a string', function(done) {
     try {
       new Guard({ id: 1, type: 1 });
-      done(new Error('An instance of guard was created without specifying a type'));
+      done(new Error('An instance of {Guard} was created without specifying a valid type'));
     } catch (error) {
       done();
     }
@@ -44,6 +44,40 @@ describe('gelert', function() {
 
     Chai.expect(role.getId()).to.not.be.null;
     Chai.expect(role.getId()).to.be.a.uuid('v4');
+  });
+
+  it('should not create a new instance of {Permission} without a value', function(done) {
+    try {
+      new Permission();
+      done(new Error('An instance of {Permission} was created without specifying a type'));
+    } catch (error) {
+      done();
+    }
+  });
+
+  it('should not create a new instance of {Permission} specifying a value as anything other than a string', function(done) {
+    try {
+      new Permission(1);
+      done(new Error('An instance of {Permission} was created without specifying a valid value'));
+    } catch (error) {
+      done();
+    }
+  });
+
+  it('should create a new instance of {Permission}', async function() {
+    let permission = new Permission('my.test.permission');
+
+    Chai.expect(permission.getValue()).to.be.a('string');
+    Chai.expect(permission.getValue()).to.equal('my.test.permission');
+  });
+
+  it('should create a new instance of {Permission} and return a "negative" value', async function() {
+    let permission = new Permission('my.test.permission');
+
+    Chai.expect(permission.getValue()).to.be.a('string');
+    Chai.expect(permission.getValue()).to.equal('my.test.permission');
+    Chai.expect(permission.getNegatedValue()).to.be.a('string');
+    Chai.expect(permission.getNegatedValue()).to.equal('-my.test.permission');
   });
 
 });

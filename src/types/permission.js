@@ -9,17 +9,11 @@ export default class Permission {
    */
   constructor(value) {
     if (typeof value === 'string') {
-      negated = false;
-
-      if (value.chatAt(0) === '-') {
-        negated = true;
-      }
-
       while (value.charAt(0) === '-') {
         value = value.substr(1);
       }
 
-      this.value = (negated) ? ('-' + value) : value;
+      this.value = value;
     } else {
       throw new Error('The specified value must be of type string');
     }
@@ -36,6 +30,15 @@ export default class Permission {
    */
   getValue() {
     return (this.isNegated() ? this.value.substr(1) : this.value);
+  }
+
+  /**
+   * Check if the permission value of the class is negated.
+   *
+   * @returns {boolean} true if the specified value if negated
+   */
+  isNegated() {
+    return (this.value.charAt(0) === '-');
   }
 
   /**
@@ -80,15 +83,6 @@ export default class Permission {
     }
 
     return false;
-  }
-
-  /**
-   * Check if the permission value of the class is negated.
-   *
-   * @returns {boolean} true if the specified value if negated
-   */
-  isNegated() {
-    return (this.getValue().charAt(0) === '-');
   }
 
   /**
