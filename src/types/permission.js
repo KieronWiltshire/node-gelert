@@ -87,6 +87,8 @@ export default class Permission {
           if (a[i] !== b[i]) {
             if (a[i] === '*') {
               return true;
+            } else {
+              return false;
             }
           }
         } else {
@@ -108,7 +110,7 @@ export default class Permission {
     if (permission instanceof Permission) {
       return (this.equals(permission.getValue()));
     } else {
-      return (typeof permission === 'string' && this.getValue() === permission)
+      return (typeof permission === 'string' && this.getValue() === permission);
     }
   }
 

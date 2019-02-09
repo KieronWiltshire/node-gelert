@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'lodash';
 import uuidv4 from 'uuid/v4';
 import Permission from './permission';
 
@@ -87,7 +88,7 @@ export default class Guard {
   removeGuard(guard) {
     if (this.containsGuard(guard)) {
       for (let i = 0; i < this._guards.length; i++) {
-        if (this._guards[i] === guard) {
+        if (this._guards[i].equals(guard)) {
           this._guards.splice(i, 1);
           return true;
         }
@@ -223,7 +224,7 @@ export default class Guard {
       let p = this._permissions[i];
 
       if (p.isNegated() && p.equals(permission.getNegativeValue())) {
-        return false;
+        return permission.isNegated();
       }
 
       if (p.equals(permission.getValue()) || (p.isSuper(permission) && !p.isNegated())) {

@@ -150,8 +150,10 @@ describe('gelert', function() {
     let permission = new Permission('my.test.permission');
 
     Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(1);
   });
 
   it('should fail attempting to remove a permission from a {Guard} that doesn\'t exist using a {Permission} instance', async function() {
@@ -159,8 +161,10 @@ describe('gelert', function() {
     let permission = new Permission('my.test.permission');
 
     Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.removePermission(permission)).to.be.false;
     Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
   });
 
   it('should remove a permission from a {Guard} using an equal {Permission} instance', async function() {
@@ -168,18 +172,23 @@ describe('gelert', function() {
     let permission = new Permission('my.test.permission');
 
     Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(1);
     Chai.expect(role.removePermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
   });
 
   it('should fail attempting to remove a permission from a {Guard} that doesn\'t exist using a string representation of a {Permission}', async function() {
     let role = new Guard({ type: 'role' });
 
     Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.removePermission('my.test.permission')).to.be.false;
     Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
   });
 
   it('should remove a permission from a {Guard} that using a string representation of a {Permission}', async function() {
@@ -187,10 +196,13 @@ describe('gelert', function() {
     let permission = new Permission('my.test.permission');
 
     Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission('my.test.permission')).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(1);
     Chai.expect(role.removePermission('my.test.permission')).to.be.true;
     Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+
   });
 
   it('should add a permission to a {Guard} and check if it has access to the specified permission', async function() {
@@ -198,8 +210,10 @@ describe('gelert', function() {
     let permission = new Permission('my.test.permission');
 
     Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(1);
     Chai.expect(role.hasPermission(permission)).to.be.true;
   });
 
@@ -208,11 +222,14 @@ describe('gelert', function() {
     let permission = new Permission('my.test.permission');
 
     Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(1);
     Chai.expect(role.hasPermission(permission)).to.be.true;
     Chai.expect(role.removePermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.hasPermission(permission)).to.be.false;
   });
 
@@ -221,8 +238,10 @@ describe('gelert', function() {
     let permission = new Permission('my.test.permission');
 
     Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission('my.test.permission')).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(1);
     Chai.expect(role.hasPermission('my.test.permission')).to.be.true;
   });
 
@@ -231,11 +250,14 @@ describe('gelert', function() {
     let permission = new Permission('my.test.permission');
 
     Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(1);
     Chai.expect(role.hasPermission(permission)).to.be.true;
     Chai.expect(role.removePermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.hasPermission(permission)).to.be.false;
   });
 
@@ -244,11 +266,14 @@ describe('gelert', function() {
     let permission = new Permission('my.test.permission');
 
     Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission('my.test.permission')).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(1);
     Chai.expect(role.hasPermission('my.test.permission')).to.be.true;
     Chai.expect(role.removePermission('my.test.permission')).to.be.true;
     Chai.expect(role.containsPermission('my.test.permission')).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.hasPermission('my.test.permission')).to.be.false;
   });
 
@@ -259,9 +284,11 @@ describe('gelert', function() {
 
     Chai.expect(role.containsPermission(permission)).to.be.false;
     Chai.expect(role.containsPermission(subPermission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(subPermission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(1);
     Chai.expect(role.hasPermission(permission)).to.be.true;
     Chai.expect(role.hasPermission(subPermission)).to.be.true;
   });
@@ -275,10 +302,12 @@ describe('gelert', function() {
     Chai.expect(role.containsPermission(permission)).to.be.false;
     Chai.expect(role.containsPermission(subPermission)).to.be.false;
     Chai.expect(role.containsPermission(subPermission2)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(subPermission)).to.be.false;
     Chai.expect(role.containsPermission(subPermission2)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(1);
     Chai.expect(role.hasPermission(permission)).to.be.true;
     Chai.expect(role.hasPermission(subPermission)).to.be.true;
     Chai.expect(role.hasPermission(subPermission2)).to.be.true;
@@ -290,12 +319,15 @@ describe('gelert', function() {
     let negativePermission = new Permission('-my.test.permission');
 
     Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(1);
 
     Chai.expect(role.containsPermission(negativePermission)).to.be.false;
     Chai.expect(role.addPermission(negativePermission)).to.be.true;
     Chai.expect(role.containsPermission(negativePermission)).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(2);
 
     Chai.expect(role.hasPermission(permission)).to.be.false;
   });
@@ -306,12 +338,15 @@ describe('gelert', function() {
     let negativePermission = new Permission('-my.test.*');
 
     Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(1);
 
     Chai.expect(role.containsPermission(negativePermission)).to.be.false;
     Chai.expect(role.addPermission(negativePermission)).to.be.true;
     Chai.expect(role.containsPermission(negativePermission)).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(2);
 
     Chai.expect(role.hasPermission(permission)).to.be.true;
   });
@@ -324,12 +359,15 @@ describe('gelert', function() {
     let subPermission2 = new Permission('my.other.permission');
 
     Chai.expect(role.containsPermission(permission)).to.be.false;
+    Chai.expect(role.permissions()).to.have.lengthOf(0);
     Chai.expect(role.addPermission(permission)).to.be.true;
     Chai.expect(role.containsPermission(permission)).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(1);
 
     Chai.expect(role.containsPermission(negativePermission)).to.be.false;
     Chai.expect(role.addPermission(negativePermission)).to.be.true;
     Chai.expect(role.containsPermission(negativePermission)).to.be.true;
+    Chai.expect(role.permissions()).to.have.lengthOf(2);
 
     Chai.expect(role.containsPermission(subPermission)).to.be.false;
 
@@ -338,5 +376,166 @@ describe('gelert', function() {
     Chai.expect(role.hasPermission(subPermission2)).to.be.true;
   });
 
-  // TODO: test inheritence
+  it('should not allow a guard to inherit anything other than an instance of {Guard}', function(done) {
+    let adminRole = new Guard({ type: 'role' });
+
+    try {
+      adminRole.addGuard('test');
+      done(new Error('A {Guard} is inherited a value that isn\'t an instance of {Guard}'));
+    } catch (error) {
+      done();
+    }
+  });
+
+  it('should allow a guard to inherit another guard', async function() {
+    let adminRole = new Guard({ type: 'role' });
+    let userRole = new Guard({ type: 'role' });
+
+    Chai.expect(adminRole.containsGuard(userRole)).to.be.false;
+    Chai.expect(adminRole.guards()).to.have.lengthOf(0);
+    Chai.expect(adminRole.addGuard(userRole)).to.be.true;
+    Chai.expect(adminRole.containsGuard(userRole)).to.be.true;
+    Chai.expect(adminRole.guards()).to.have.lengthOf(1);
+  });
+
+  it('should not allow the removal of a guard that isn\'t inherited', async function() {
+    let adminRole = new Guard({ type: 'role' });
+    let userRole = new Guard({ type: 'role' });
+
+    Chai.expect(adminRole.containsGuard(userRole)).to.be.false;
+    Chai.expect(adminRole.guards()).to.have.lengthOf(0);
+    Chai.expect(adminRole.removeGuard(userRole)).to.be.false;
+    Chai.expect(adminRole.containsGuard(userRole)).to.be.false;
+    Chai.expect(adminRole.guards()).to.have.lengthOf(0);
+  });
+
+  it('should allow the removal of an inherited guard', async function() {
+    let adminRole = new Guard({ type: 'role' });
+    let userRole = new Guard({ type: 'role' });
+
+    Chai.expect(adminRole.containsGuard(userRole)).to.be.false;
+    Chai.expect(adminRole.guards()).to.have.lengthOf(0);
+    Chai.expect(adminRole.addGuard(userRole)).to.be.true;
+    Chai.expect(adminRole.containsGuard(userRole)).to.be.true;
+    Chai.expect(adminRole.guards()).to.have.lengthOf(1);
+
+    Chai.expect(adminRole.removeGuard(userRole)).to.be.true;
+    Chai.expect(adminRole.containsGuard(userRole)).to.be.false;
+    Chai.expect(adminRole.guards()).to.have.lengthOf(0);
+  });
+
+  it('should allow access to a permission given to an inherited guard', async function() {
+    let adminRole = new Guard({ type: 'role' });
+    let userRole = new Guard({ type: 'role' });
+
+    let userPermission = new Permission('user.*');
+    let adminPermission = new Permission('admin.*');
+
+    Chai.expect(userRole.containsPermission(userPermission)).to.be.false;
+    Chai.expect(userRole.permissions()).to.have.lengthOf(0);
+    Chai.expect(userRole.addPermission(userPermission)).to.be.true;
+    Chai.expect(userRole.containsPermission(userPermission)).to.be.true;
+    Chai.expect(userRole.permissions()).to.have.lengthOf(1);
+
+    Chai.expect(adminRole.containsPermission(adminPermission)).to.be.false;
+    Chai.expect(adminRole.permissions()).to.have.lengthOf(0);
+    Chai.expect(adminRole.addPermission(adminPermission)).to.be.true;
+    Chai.expect(adminRole.containsPermission(adminPermission)).to.be.true;
+    Chai.expect(adminRole.permissions()).to.have.lengthOf(1);
+
+    Chai.expect(userRole.hasPermission(userPermission)).to.be.true;
+    Chai.expect(userRole.hasPermission(adminPermission)).to.be.false;
+
+    Chai.expect(adminRole.hasPermission(userPermission)).to.be.false;
+    Chai.expect(adminRole.hasPermission(adminPermission)).to.be.true;
+
+    Chai.expect(adminRole.containsGuard(userRole)).to.be.false;
+    Chai.expect(adminRole.guards()).to.have.lengthOf(0);
+    Chai.expect(adminRole.addGuard(userRole)).to.be.true;
+    Chai.expect(adminRole.containsGuard(userRole)).to.be.true;
+    Chai.expect(adminRole.guards()).to.have.lengthOf(1);
+
+    Chai.expect(userRole.hasPermission(userPermission)).to.be.true;
+    Chai.expect(userRole.hasPermission(adminPermission)).to.be.false;
+
+    Chai.expect(adminRole.hasPermission(userPermission)).to.be.true;
+    Chai.expect(adminRole.hasPermission(adminPermission)).to.be.true;
+  });
+
+  it('should not give access to a permission that is negated from a child guard', async function() {
+    let adminRole = new Guard({ type: 'role' });
+    let userRole = new Guard({ type: 'role' });
+    let guestRole = new Guard({ type: 'role' });
+
+    let guestPermission = new Permission('guest.view');
+    let userPermission = new Permission('user.*');
+    let userPermission2 = new Permission('-guest.view');
+    let adminPermission = new Permission('admin.*');
+
+    Chai.expect(guestRole.containsPermission(guestPermission)).to.be.false;
+    Chai.expect(guestRole.permissions()).to.have.lengthOf(0);
+    Chai.expect(guestRole.addPermission(guestPermission)).to.be.true;
+    Chai.expect(guestRole.containsPermission(guestPermission)).to.be.true;
+    Chai.expect(guestRole.permissions()).to.have.lengthOf(1);
+
+    Chai.expect(userRole.containsPermission(userPermission)).to.be.false;
+    Chai.expect(userRole.permissions()).to.have.lengthOf(0);
+    Chai.expect(userRole.addPermission(userPermission)).to.be.true;
+    Chai.expect(userRole.containsPermission(userPermission)).to.be.true;
+    Chai.expect(userRole.permissions()).to.have.lengthOf(1);
+
+    Chai.expect(userRole.containsPermission(userPermission2)).to.be.false;
+    Chai.expect(userRole.permissions()).to.have.lengthOf(1);
+    Chai.expect(userRole.addPermission(userPermission2)).to.be.true;
+    Chai.expect(userRole.containsPermission(userPermission2)).to.be.true;
+    Chai.expect(userRole.permissions()).to.have.lengthOf(2);
+
+    Chai.expect(adminRole.containsPermission(adminPermission)).to.be.false;
+    Chai.expect(adminRole.permissions()).to.have.lengthOf(0);
+    Chai.expect(adminRole.addPermission(adminPermission)).to.be.true;
+    Chai.expect(adminRole.containsPermission(adminPermission)).to.be.true;
+    Chai.expect(adminRole.permissions()).to.have.lengthOf(1);
+
+    Chai.expect(guestRole.hasPermission(guestPermission)).to.be.true;
+    Chai.expect(guestRole.hasPermission(userPermission)).to.be.false;
+    Chai.expect(guestRole.hasPermission(userPermission2)).to.be.false;
+    Chai.expect(guestRole.hasPermission(adminPermission)).to.be.false;
+
+    Chai.expect(userRole.hasPermission(guestPermission)).to.be.false;
+    Chai.expect(userRole.hasPermission(userPermission)).to.be.true;
+    Chai.expect(userRole.hasPermission(userPermission2)).to.be.true;
+    Chai.expect(userRole.hasPermission(adminPermission)).to.be.false;
+
+    Chai.expect(adminRole.hasPermission(guestPermission)).to.be.false;
+    Chai.expect(adminRole.hasPermission(userPermission)).to.be.false;
+    Chai.expect(adminRole.hasPermission(userPermission2)).to.be.false;
+    Chai.expect(adminRole.hasPermission(adminPermission)).to.be.true;
+
+    Chai.expect(userRole.containsGuard(guestRole)).to.be.false;
+    Chai.expect(userRole.guards()).to.have.lengthOf(0);
+    Chai.expect(userRole.addGuard(guestRole)).to.be.true;
+    Chai.expect(userRole.containsGuard(guestRole)).to.be.true;
+    Chai.expect(userRole.guards()).to.have.lengthOf(1);
+
+    Chai.expect(adminRole.containsGuard(userRole)).to.be.false;
+    Chai.expect(adminRole.guards()).to.have.lengthOf(0);
+    Chai.expect(adminRole.addGuard(userRole)).to.be.true;
+    Chai.expect(adminRole.containsGuard(userRole)).to.be.true;
+    Chai.expect(adminRole.guards()).to.have.lengthOf(1);
+
+    Chai.expect(guestRole.hasPermission(guestPermission)).to.be.true;
+    Chai.expect(guestRole.hasPermission(userPermission)).to.be.false;
+    Chai.expect(guestRole.hasPermission(userPermission2)).to.be.false;
+    Chai.expect(guestRole.hasPermission(adminPermission)).to.be.false;
+
+    Chai.expect(userRole.hasPermission(guestPermission)).to.be.false;
+    Chai.expect(userRole.hasPermission(userPermission)).to.be.true;
+    Chai.expect(userRole.hasPermission(userPermission2)).to.be.true;
+    Chai.expect(userRole.hasPermission(adminPermission)).to.be.false;
+
+    Chai.expect(adminRole.hasPermission(guestPermission)).to.be.false;
+    Chai.expect(adminRole.hasPermission(userPermission)).to.be.true;
+    Chai.expect(adminRole.hasPermission(userPermission2)).to.be.true;
+    Chai.expect(adminRole.hasPermission(adminPermission)).to.be.true;
+  });
 });
